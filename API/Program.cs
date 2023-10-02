@@ -1,26 +1,14 @@
 using DAL.Db;
 using DAL.Extentions;
+using BLL.Extentions;
 using Microsoft.EntityFrameworkCore;
+using API.Extentions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var configuration = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json", optional: true)
-    .Build();
-
-builder.Services.AddControllers();
-
-builder.Services.AddDALServices(configuration);
-
-builder.Services.AddCors(opt => {
-    opt.AddPolicy("CorsPolicy", policy =>{
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
-    });
-});
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddAplicationServices(builder.Configuration);
+builder.Services.AddDALServices(builder.Configuration);
+builder.Services.AddBLLServices(builder.Configuration);
 
 var app = builder.Build();
 
