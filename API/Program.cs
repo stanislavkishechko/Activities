@@ -13,6 +13,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddDALServices(configuration);
 
+builder.Services.AddCors(opt => {
+    opt.AddPolicy("CorsPolicy", policy =>{
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    });
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -24,7 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
