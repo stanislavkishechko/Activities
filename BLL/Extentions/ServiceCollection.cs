@@ -1,5 +1,8 @@
-﻿using BLL.Activities.Queries.GetActivitiesList;
+﻿using BLL.Activities.Commands.CreateActivity;
+using BLL.Activities.Queries.GetActivitiesList;
 using BLL.Mapping;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +14,8 @@ namespace BLL.Extentions
         {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetActivityListQueryHandler).Assembly));
             services.AddAutoMapper(typeof(AssemblyMappingProfile).Assembly);
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<CreateActivityCommand>();
 
             return services;
         }

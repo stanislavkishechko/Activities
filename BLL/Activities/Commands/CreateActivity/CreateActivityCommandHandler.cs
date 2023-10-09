@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BLL.Activities.Commands.CreateActivity
 {
-    public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand>
+    public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand, Result<Unit>>
     {
         private readonly DataContext _dbContext;
 
@@ -12,10 +12,15 @@ namespace BLL.Activities.Commands.CreateActivity
             _dbContext = dbContext;
         }
 
-        public async Task Handle(CreateActivityCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(CreateActivityCommand request, CancellationToken cancellationToken)
         {
             _dbContext.Activities.Add(request.Activity);
-            await _dbContext.SaveChangesAsync();
+            
+            var result = await _dbContext.SaveChangesAsync() > 0;
+
+            if (!result) return Result<Unit>.Failure("Failed to cteate activity");
+
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

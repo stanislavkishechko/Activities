@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Activities.Commands.DeleteActivity
 {
-    public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand>
+    public class DeleteActivityCommandHandler : IRequestHandler<DeleteActivityCommand, Result<Unit>>
     {
         private readonly DataContext _dbContext;
 
@@ -17,13 +17,19 @@ namespace BLL.Activities.Commands.DeleteActivity
             _dbContext = dbContext;
         }
 
-        public async Task Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteActivityCommand request, CancellationToken cancellationToken)
         {
             var activity = await _dbContext.Activities.FindAsync(request.Id);
 
+            if (activity == null) return null;
+
             _dbContext.Remove(activity);
 
-            await _dbContext.SaveChangesAsync();
+            var result = await _dbContext.SaveChangesAsync() > 0;
+
+            if (!result) return Result<Unit>.Failure("Failde to delete the activity");
+
+            return Result<Unit>.Success(Unit.Value);
         }
     }
 }

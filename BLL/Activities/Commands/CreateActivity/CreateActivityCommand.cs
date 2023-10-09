@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BLL.Activities.Commands.CreateActivity
 {
-    public class CreateActivityCommand : IRequest
+    public class CreateActivityCommand : IRequest<Result<Unit>>
     {
         public Activity Activity { get; set; }
     }

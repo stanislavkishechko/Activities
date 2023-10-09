@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Activities.Commands.DeleteActivity
 {
-    public class DeleteActivityCommand : IRequest
+    public class DeleteActivityCommand : IRequest<Result<Unit>>
     {
         public Guid Id { get; set; }
     }

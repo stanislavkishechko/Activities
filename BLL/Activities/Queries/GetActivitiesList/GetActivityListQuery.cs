@@ -3,7 +3,7 @@ using MediatR;
 
 namespace BLL.Activities.Queries.GetActivitiesList
 {
-    public class GetActivityListQuery : IRequest<List<Activity>>
+    public class GetActivityListQuery : IRequest<Result<List<Activity>>>
     {
 
     }

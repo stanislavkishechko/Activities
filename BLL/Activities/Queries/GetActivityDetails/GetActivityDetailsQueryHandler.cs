@@ -4,7 +4,7 @@ using MediatR;
 
 namespace BLL.Activities.Queries.GetActivityDetails
 {
-    public class GetActivityDetailsQueryHandler : IRequestHandler<GetActivityDetailsQuery, Activity>
+    public class GetActivityDetailsQueryHandler : IRequestHandler<GetActivityDetailsQuery, Result<Activity>>
     {
         private readonly DataContext _dbContext;
 
@@ -13,9 +13,11 @@ namespace BLL.Activities.Queries.GetActivityDetails
             _dbContext = dbContext;
         }
 
-        public async Task<Activity> Handle(GetActivityDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<Activity>> Handle(GetActivityDetailsQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Activities.FindAsync(request.Id);
+            var activity =  await _dbContext.Activities.FindAsync(request.Id);
+
+            return Result<Activity>.Success(activity);
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Activities.Queries.GetActivitiesList
 {
-    public class GetActivityListQueryHandler : IRequestHandler<GetActivityListQuery, List<Activity>>
+    public class GetActivityListQueryHandler : IRequestHandler<GetActivityListQuery, Result<List<Activity>>>
     {
         private readonly DataContext _dbContext;
 
@@ -14,9 +14,11 @@ namespace BLL.Activities.Queries.GetActivitiesList
             _dbContext = dbContext;
         }
 
-        public async Task<List<Activity>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<Activity>>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
         {
-            return await _dbContext.Activities.ToListAsync();
+            var activities = await _dbContext.Activities.ToListAsync();
+
+            return Result<List<Activity>>.Success(activities);
         }
     }
 }
