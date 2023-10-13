@@ -3,13 +3,13 @@ using BLL.Activities.Commands.DeleteActivity;
 using BLL.Activities.Commands.UpdateActivity;
 using BLL.Activities.Queries.GetActivitiesList;
 using BLL.Activities.Queries.GetActivityDetails;
-using DAL.Db;
 using DAL.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]

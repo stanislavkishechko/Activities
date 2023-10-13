@@ -6,7 +6,7 @@ namespace DAL.Db
 {
     public class DataContext : IdentityDbContext<AppUser>
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        public DataContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Activity> Activities { get; set; }
     }
