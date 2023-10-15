@@ -1,7 +1,9 @@
 ﻿using API.Services;
+using BLL.Security.HostRequirement;
 using DAL.Db;
 using DAL.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -32,6 +34,15 @@ namespace API.Extentions
                     };
                 });
 
+            services.AddAuthorization(opt =>
+            {
+                opt.AddPolicy("IsActivityHost", policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<TokenService>();
 
             return services;

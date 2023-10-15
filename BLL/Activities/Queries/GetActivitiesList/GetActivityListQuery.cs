@@ -1,9 +1,8 @@
-﻿using DAL.Domain.Entities;
-using MediatR;
+﻿using MediatR;
 
 namespace BLL.Activities.Queries.GetActivitiesList
 {
-    public class GetActivityListQuery : IRequest<Result<List<Activity>>>
+    public class GetActivityListQuery : IRequest<Result<List<ActivityDto>>>
     {
 
     }

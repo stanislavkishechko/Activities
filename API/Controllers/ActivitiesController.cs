@@ -3,13 +3,13 @@ using BLL.Activities.Commands.DeleteActivity;
 using BLL.Activities.Commands.UpdateActivity;
 using BLL.Activities.Queries.GetActivitiesList;
 using BLL.Activities.Queries.GetActivityDetails;
+using BLL.Attendees.Commands.UpdateAttendees;
 using DAL.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
@@ -35,6 +35,7 @@ namespace API.Controllers
             return HandleResult(result);
         }
 
+        [Authorize(Policy = "IsActivityHost")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateActivity(Guid id, Activity activity)
         {
@@ -45,10 +46,19 @@ namespace API.Controllers
             return HandleResult(result);
         }
 
+        [Authorize(Policy = "IsActivityHost")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
             var result = await Mediator.Send(new DeleteActivityCommand { Id = id });
+
+            return HandleResult(result);
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            var result = await Mediator.Send(new UpdateAttendanceCommand { Id = id });
 
             return HandleResult(result);
         }

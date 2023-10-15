@@ -1,6 +1,8 @@
 ﻿using BLL.Activities.Commands.CreateActivity;
 using BLL.Activities.Queries.GetActivitiesList;
+using BLL.Interfaces;
 using BLL.Mapping;
+using DAL.Security;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +18,8 @@ namespace BLL.Extentions
             services.AddAutoMapper(typeof(AssemblyMappingProfile).Assembly);
             services.AddFluentValidationAutoValidation();
             services.AddValidatorsFromAssemblyContaining<CreateActivityCommand>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<IUserAccessor, UserAccessor>();
 
             return services;
         }
