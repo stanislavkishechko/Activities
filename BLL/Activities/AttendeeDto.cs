@@ -1,6 +1,6 @@
-﻿namespace BLL.Interfaces.Profiles
+﻿namespace BLL.Activities
 {
-    public class Profile
+    public class AttendeeDto
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }

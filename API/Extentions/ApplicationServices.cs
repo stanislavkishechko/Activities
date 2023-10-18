@@ -1,8 +1,4 @@
-﻿using BLL.Activities.Queries.GetActivitiesList;
-using BLL.Extentions;
-using BLL.Mapping;
-
-namespace API.Extentions
+﻿namespace API.Extentions
 {
     public static class ApplicationServices
     {

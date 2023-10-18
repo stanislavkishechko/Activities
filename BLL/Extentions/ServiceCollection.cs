@@ -2,6 +2,8 @@
 using BLL.Activities.Queries.GetActivitiesList;
 using BLL.Interfaces;
 using BLL.Mapping;
+using BLL.Photos;
+using BLL.Photos.Settings;
 using DAL.Security;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -20,6 +22,8 @@ namespace BLL.Extentions
             services.AddValidatorsFromAssemblyContaining<CreateActivityCommand>();
             services.AddHttpContextAccessor();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.Configure<CloudinarySettings>(configuration.GetSection("Cloudinary"));
 
             return services;
         }
