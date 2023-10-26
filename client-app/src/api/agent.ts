@@ -1,11 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
-import { PaginatedResult } from '../models/pagination';
-import { User, UserFormValues } from '../models/user';
 import { store } from '../stores/store';
 import { router } from '../app/router/Routes';
-import { Photo, Profile } from '../app/models/profile';
+import { Photo, Profile, UserActivity } from '../app/models/profile';
 import { Activity, ActivityFormValues } from '../app/models/activity';
+import { PaginatedResult } from '../app/models/pagination';
+import { User, UserFormValues } from '../app/models/user';
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
