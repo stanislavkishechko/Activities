@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using BLL.Interfaces;
 using DAL.Db;
 using DAL.Domain.Entities;
 using MediatR;
@@ -11,17 +12,20 @@ namespace BLL.Activities.Queries.GetActivitiesList
     {
         private readonly DataContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly IUserAccessor _userAccessor;
 
-        public GetActivityListQueryHandler(DataContext dbContext, IMapper mapper)
+        public GetActivityListQueryHandler(DataContext dbContext, IMapper mapper, IUserAccessor userAccessor)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _userAccessor = userAccessor;
         }
 
         public async Task<Result<List<ActivityDto>>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
         {
             var activities = await _dbContext.Activities
-                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
+                    new {currentUserName = _userAccessor.GetUserName()})
                 .ToListAsync(cancellationToken);
 
             return Result<List<ActivityDto>>.Success(activities);
