@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using BLL.Interfaces;
+using BLL.Paging;
 using DAL.Db;
 using DAL.Domain.Entities;
 using MediatR;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Activities.Queries.GetActivitiesList
 {
-    public class GetActivityListQueryHandler : IRequestHandler<GetActivityListQuery, Result<List<ActivityDto>>>
+    public class GetActivityListQueryHandler : IRequestHandler<GetActivityListQuery, Result<PagedList<ActivityDto>>>
     {
         private readonly DataContext _dbContext;
         private readonly IMapper _mapper;
@@ -21,14 +22,27 @@ namespace BLL.Activities.Queries.GetActivitiesList
             _userAccessor = userAccessor;
         }
 
-        public async Task<Result<List<ActivityDto>>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PagedList<ActivityDto>>> Handle(GetActivityListQuery request, CancellationToken cancellationToken)
         {
-            var activities = await _dbContext.Activities
+            var query = _dbContext.Activities
+                .Where( d => d.Date >= request.Params.StartDate)
+                .OrderBy(d => d.Date)
                 .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider, 
                     new {currentUserName = _userAccessor.GetUserName()})
-                .ToListAsync(cancellationToken);
+                .AsQueryable();
 
-            return Result<List<ActivityDto>>.Success(activities);
+            if (request.Params.IsGoing && !request.Params.IsHost)
+            {
+                query = query.Where(x => x.Attendees.Any(a => a.Username == _userAccessor.GetUserName()));
+            }
+
+            if (request.Params.IsHost && !request.Params.IsGoing)
+            {
+                query = query.Where(x => x.HostUsername == _userAccessor.GetUserName());
+            }
+
+            return Result<PagedList<ActivityDto>>.Success(
+                await PagedList<ActivityDto>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
         }
     }
 }

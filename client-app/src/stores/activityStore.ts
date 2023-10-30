@@ -3,8 +3,7 @@ import agent from "../api/agent";
 import { store } from "./store";
 import { Profile } from "../app/models/profile";
 import { Activity, ActivityFormValues } from "../app/models/activity";
-import { Pagination } from "semantic-ui-react";
-import { PagingParams } from "../app/models/pagination";
+import { Pagination, PagingParams } from "../app/models/pagination";
 
 export default class ActivityStore {
     activityRegistry = new Map<string, Activity>();

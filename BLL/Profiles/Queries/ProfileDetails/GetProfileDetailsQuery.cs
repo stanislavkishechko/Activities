@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace BLL.Profiles.Queries
+namespace BLL.Profiles.Queries.ProfileDetails
 {
     public class GetProfileDetailsQuery : IRequest<Result<Profile>>
     {

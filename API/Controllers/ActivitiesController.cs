@@ -1,4 +1,5 @@
-﻿using BLL.Activities.Commands.CreateActivity;
+﻿using BLL.Activities;
+using BLL.Activities.Commands.CreateActivity;
 using BLL.Activities.Commands.DeleteActivity;
 using BLL.Activities.Commands.UpdateActivity;
 using BLL.Activities.Queries.GetActivitiesList;
@@ -13,11 +14,11 @@ namespace API.Controllers
     public class ActivitiesController : BaseApiController
     {
         [HttpGet]
-        public async Task<IActionResult> GetActivies()
+        public async Task<IActionResult> GetActivies([FromQuery]ActivityParams param)
         {
-            var result = await Mediator.Send(new GetActivityListQuery());
+            var result = await Mediator.Send(new GetActivityListQuery { Params = param});
 
-            return HandleResult(result);
+            return HandlePagedResult(result);
         }
 
         [HttpGet("{id}")]

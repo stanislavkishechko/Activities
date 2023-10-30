@@ -5,7 +5,7 @@ using DAL.Db;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BLL.Profiles.Queries
+namespace BLL.Profiles.Queries.ProfileDetails
 {
     public class GetProfileDetailsQueryHandler : IRequestHandler<GetProfileDetailsQuery, Result<Profile>>
     {
@@ -23,8 +23,8 @@ namespace BLL.Profiles.Queries
         public async Task<Result<Profile>> Handle(GetProfileDetailsQuery request, CancellationToken cancellationToken)
         {
             var user = await _dbContext.Users
-                     .ProjectTo<Profile>(_mapper.ConfigurationProvider, 
-                        new {currentUsername = _userAccessor.GetUserName()})
+                     .ProjectTo<Profile>(_mapper.ConfigurationProvider,
+                        new { currentUsername = _userAccessor.GetUserName() })
                      .SingleOrDefaultAsync(x => x.Username == request.Username);
 
             if (user == null) return null;
